@@ -27,8 +27,8 @@
             padding: 20px 40px;
             font-size: 20px;
             background-color: #FFD400; /* Topo Chico Yellow */
-            color: #E8006F; /* Topo Chico Pink */
-            border: none;
+            color: #0C5C38; /* Dark Topo Chico Green */
+            border: 3px solid #0C5C38; /* Green outline */
             border-radius: 12px;
             cursor: pointer;
             position: relative;
@@ -36,7 +36,6 @@
             animation: blink 1s infinite;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             max-width: 90%;
-            word-break: keep-all;
         }
         @keyframes blink {
             0%, 50%, 100% { opacity: 1; }
@@ -48,25 +47,23 @@
             height: auto;
             animation: fall linear infinite;
             user-select: none;
-            pointer-events: none;
+            cursor: pointer;
         }
         @keyframes fall {
             0% { transform: translateY(-100px) rotate(0deg); }
             100% { transform: translateY(110vh) rotate(360deg); }
         }
-        /* Responsive tweaks */
+        .pop {
+            animation: pop 0.5s forwards;
+        }
+        @keyframes pop {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
+        }
         @media (max-width: 480px) {
-            h1 {
-                font-size: 28px;
-                padding-top: 30px;
-            }
-            button {
-                font-size: 18px;
-                padding: 15px 25px;
-            }
-            .topo {
-                width: 30px;
-            }
+            h1 { font-size: 28px; padding-top: 30px; }
+            button { font-size: 18px; padding: 15px 25px; }
+            .topo { width: 30px; }
         }
     </style>
 </head>
@@ -80,7 +77,6 @@
                 navigator.geolocation.getCurrentPosition(function(position) {
                     const lat = position.coords.latitude;
                     const lon = position.coords.longitude;
-                    // Destination: The Page, SF
                     const destination = '37.77212,-122.4370476';
                     const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lon}&destination=${destination}&travelmode=walking`;
                     window.location.href = mapsUrl;
@@ -92,14 +88,21 @@
             }
         }
 
-        // Create raining Topo Chico bottles from the top
+        // Create raining Topo Chico bottles that pop when clicked
         for(let i = 0; i < 30; i++) {
             let img = document.createElement('img');
-            img.src = 'topo.png'; // Ensure 'topo.png' exists in your folder
+            img.src = 'topo.png'; // Make sure 'topo.png' is in your folder
             img.className = 'topo';
             img.style.left = Math.random() * window.innerWidth + 'px';
-            img.style.top = '-100px'; // Start off the top of the screen
-            img.style.animationDuration = (5 + Math.random() * 5) + 's'; // Random fall speed
+            img.style.top = '-100px';
+            img.style.animationDuration = (5 + Math.random() * 5) + 's';
+            
+            // When clicked, pop the bottle
+            img.addEventListener('click', function() {
+                this.classList.add('pop');
+                setTimeout(() => this.remove(), 500);
+            });
+
             document.body.appendChild(img);
         }
     </script>
