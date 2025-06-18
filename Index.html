@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Topo Chico Hard Seltzers in a Glass Bottle Near Me</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: white;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            text-align: center;
+        }
+        h1 {
+            position: relative;
+            z-index: 10;
+            padding-top: 50px;
+            color: #ff0000;
+            font-family: 'Lobster', cursive;
+            font-size: 36px;
+        }
+        button {
+            padding: 20px 40px;
+            font-size: 20px;
+            background-color: #FFD400; /* Topo Chico Yellow */
+            color: #E8006F; /* Topo Chico Pink */
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            position: relative;
+            z-index: 10;
+            animation: blink 1s infinite;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0; }
+        }
+        .topo {
+            position: absolute;
+            width: 50px;
+            height: auto;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-100px) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+        /* Cursed sketchy ad styling */
+        .sketchy-ad {
+            margin: 30px auto;
+            padding: 15px;
+            width: 320px;
+            background: linear-gradient(135deg, #ff0000, #ffff00);
+            color: #000;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-size: 16px;
+            border: 4px dotted lime;
+            border-radius: 10px;
+            box-shadow: 0 0 25px red, 0 0 15px yellow;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            animation: shake 0.5s infinite;
+        }
+        @keyframes shake {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(1deg); }
+            50% { transform: rotate(0deg); }
+            75% { transform: rotate(-1deg); }
+            100% { transform: rotate(0deg); }
+        }
+        .sketchy-ad .alert {
+            color: red;
+            font-size: 18px;
+            font-weight: bold;
+            animation: blinkText 0.7s infinite;
+        }
+        @keyframes blinkText {
+            0%, 100% { color: red; }
+            50% { color: yellow; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Topo Chico Hard Seltzers in a Glass Bottle Near Me</h1>
+    <button onclick="goToThePage()">Locate TCHSIAGB</button>
+
+    <!-- The cursed fake sketchy ad block -->
+    <div class="sketchy-ad">
+        <div class="alert">🚨 ALERT! LIMITED STOCK DETECTED!! 🚨</div>
+        <p><strong>Congratulations!!!</strong><br> You May Have Been Selected For EXCLUSIVE Topo Chico Bottle Offer 🤯🍓</p>
+        <p style="color: blue; font-size: 14px;">(1) Lucky User in your Area - Don't Miss!!</p>
+        <a href="https://www.topochicohard.com/hard-seltzer/glass-bottles/strawberry-guava" target="_blank" style="
+            text-decoration: none;
+            color: #fff;
+            display: inline-block;
+            padding: 10px 15px;
+            background: red;
+            border: 3px solid yellow;
+            border-radius: 5px;
+            margin-top: 10px;
+            box-shadow: 0 0 10px yellow;
+            font-size: 16px;
+        ">👉 CLAIM NOW 👈</a>
+        <p style="font-size: 10px; color: #333;">*May contain real bottles. Not a scam. Probably.</p>
+    </div>
+
+    <script>
+        function goToThePage() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var lat = position.coords.latitude;
+                    var lon = position.coords.longitude;
+                    // Destination: The Page, SF
+                    var destination = '37.77212,-122.4370476';
+                    var mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lon}&destination=${destination}&travelmode=walking`;
+                    window.location.href = mapsUrl;
+                }, function(error) {
+                    alert('Could not get your location. Please allow location access.');
+                });
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
+        }
+
+        // Create raining Topo Chico bottles properly from the top
+        for(let i = 0; i < 30; i++) {
+            let img = document.createElement('img');
+            img.src = 'topo.png'; // Ensure this image exists in your folder
+            img.className = 'topo';
+            img.style.left = Math.random() * window.innerWidth + 'px';
+            img.style.top = '-100px'; // Always start off top
+            img.style.animationDuration = (5 + Math.random() * 5) + 's'; // random fall speed
+            img.style.position = 'absolute'; // absolute positioning required
+            document.body.appendChild(img);
+        }
+    </script>
+</body>
+</html>
