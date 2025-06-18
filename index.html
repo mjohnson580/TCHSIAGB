@@ -13,6 +13,7 @@
             background: white;
             font-family: 'Comic Sans MS', cursive, sans-serif;
             text-align: center;
+            position: relative;
         }
         h1 {
             position: relative;
@@ -26,9 +27,9 @@
         button {
             padding: 20px 40px;
             font-size: 20px;
-            background-color: #FFD400; /* Topo Chico Yellow */
-            color: #0C5C38; /* Dark Topo Chico Green */
-            border: 3px solid #0C5C38; /* Green outline */
+            background-color: #FFD400;
+            color: #0C5C38;
+            border: 3px solid #0C5C38;
             border-radius: 12px;
             cursor: pointer;
             position: relative;
@@ -41,10 +42,18 @@
             0%, 50%, 100% { opacity: 1; }
             25%, 75% { opacity: 0; }
         }
+        .topo-wrapper {
+            position: absolute;
+            width: 80px; /* bigger hit area */
+            height: 80px;
+            pointer-events: auto;
+        }
         .topo {
             position: absolute;
             width: 40px;
             height: auto;
+            left: 20px; /* center inside wrapper */
+            top: 20px;
             animation: fall linear infinite;
             user-select: none;
             cursor: pointer;
@@ -60,10 +69,19 @@
             0% { transform: scale(1); opacity: 1; }
             100% { transform: scale(0); opacity: 0; }
         }
+        .smashed {
+            position: absolute;
+            width: 50px;
+            height: auto;
+            opacity: 0.3;
+            pointer-events: none; /* doesn't block clicks */
+            z-index: 1;
+        }
         @media (max-width: 480px) {
             h1 { font-size: 28px; padding-top: 30px; }
             button { font-size: 18px; padding: 15px 25px; }
-            .topo { width: 30px; }
+            .topo-wrapper { width: 60px; height: 60px; }
+            .topo { width: 30px; left: 15px; top: 15px; }
         }
     </style>
 </head>
@@ -88,22 +106,36 @@
             }
         }
 
-        // Create raining Topo Chico bottles that pop when clicked
+        // Create raining bottles
         for(let i = 0; i < 30; i++) {
+            let wrapper = document.createElement('div');
+            wrapper.className = 'topo-wrapper';
+            wrapper.style.left = Math.random() * window.innerWidth + 'px';
+            wrapper.style.top = '-100px';
+            wrapper.style.animationDuration = (5 + Math.random() * 5) + 's';
+
             let img = document.createElement('img');
-            img.src = 'topo.png'; // Make sure 'topo.png' is in your folder
+            img.src = 'topo.png'; // bottle image
             img.className = 'topo';
-            img.style.left = Math.random() * window.innerWidth + 'px';
-            img.style.top = '-100px';
-            img.style.animationDuration = (5 + Math.random() * 5) + 's';
-            
-            // When clicked, pop the bottle
-            img.addEventListener('click', function() {
+
+            // Click to pop and leave smashed glass behind
+            img.addEventListener('click', function(e) {
                 this.classList.add('pop');
-                setTimeout(() => this.remove(), 500);
+
+                // Create smashed glass at this location
+                let smashed = document.createElement('img');
+                smashed.src = 'smashed.png'; // Your smashed glass image
+                smashed.className = 'smashed';
+                smashed.style.left = wrapper.style.left;
+                smashed.style.top = (parseFloat(wrapper.style.top) + 60) + 'px'; // adjust lower
+                document.body.appendChild(smashed);
+
+                // Remove the bottle after popping
+                setTimeout(() => wrapper.remove(), 500);
             });
 
-            document.body.appendChild(img);
+            wrapper.appendChild(img);
+            document.body.appendChild(wrapper);
         }
     </script>
 </body>
