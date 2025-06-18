@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Topo Chico Hard Seltzers in a Glass Bottle Near Me</title>
-    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet" />
     <style>
         body {
             margin: 0;
@@ -88,35 +88,17 @@
     <h1>Topo Chico Hard Seltzers in a Glass Bottle Near Me</h1>
     <button onclick="goToThePage()">Locate TCHSIAGB</button>
 
-    <!-- The cursed fake sketchy ad block -->
-    <div class="sketchy-ad">
-        <div class="alert">🚨 ALERT! LIMITED STOCK DETECTED!! 🚨</div>
-        <p><strong>Congratulations!!!</strong><br> You May Have Been Selected For EXCLUSIVE Topo Chico Bottle Offer 🤯🍓</p>
-        <p style="color: blue; font-size: 14px;">(1) Lucky User in your Area - Don't Miss!!</p>
-        <a href="https://www.topochicohard.com/hard-seltzer/glass-bottles/strawberry-guava" target="_blank" style="
-            text-decoration: none;
-            color: #fff;
-            display: inline-block;
-            padding: 10px 15px;
-            background: red;
-            border: 3px solid yellow;
-            border-radius: 5px;
-            margin-top: 10px;
-            box-shadow: 0 0 10px yellow;
-            font-size: 16px;
-        ">👉 CLAIM NOW 👈</a>
-        <p style="font-size: 10px; color: #333;">*May contain real bottles. Not a scam. Probably.</p>
-    </div>
-
     <script>
+        const SHOW_SKETCHY_AD = false; // <-- Toggle the ad ON (true) or OFF (false)
+
         function goToThePage() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
-                    var lat = position.coords.latitude;
-                    var lon = position.coords.longitude;
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
                     // Destination: The Page, SF
-                    var destination = '37.77212,-122.4370476';
-                    var mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lon}&destination=${destination}&travelmode=walking`;
+                    const destination = '37.77212,-122.4370476';
+                    const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${lat},${lon}&destination=${destination}&travelmode=walking`;
                     window.location.href = mapsUrl;
                 }, function(error) {
                     alert('Could not get your location. Please allow location access.');
@@ -129,13 +111,37 @@
         // Create raining Topo Chico bottles properly from the top
         for(let i = 0; i < 30; i++) {
             let img = document.createElement('img');
-            img.src = 'topo.png'; // Ensure this image exists in your folder
+            img.src = 'topo.png'; // Make sure this image file exists in your project folder
             img.className = 'topo';
             img.style.left = Math.random() * window.innerWidth + 'px';
-            img.style.top = '-100px'; // Always start off top
+            img.style.top = '-100px'; // Start just off the top of the screen
             img.style.animationDuration = (5 + Math.random() * 5) + 's'; // random fall speed
-            img.style.position = 'absolute'; // absolute positioning required
+            img.style.position = 'absolute';
             document.body.appendChild(img);
+        }
+
+        if (SHOW_SKETCHY_AD) {
+            const adDiv = document.createElement('div');
+            adDiv.className = 'sketchy-ad';
+            adDiv.innerHTML = `
+              <div class="alert">🚨 ALERT! LIMITED STOCK DETECTED!! 🚨</div>
+              <p><strong>Congratulations!!!</strong><br> You May Have Been Selected For EXCLUSIVE Topo Chico Bottle Offer 🤯🍓</p>
+              <p style="color: blue; font-size: 14px;">(1) Lucky User in your Area - Don't Miss!!</p>
+              <a href="https://www.topochicohard.com/hard-seltzer/glass-bottles/strawberry-guava" target="_blank" style="
+                  text-decoration: none;
+                  color: #fff;
+                  display: inline-block;
+                  padding: 10px 15px;
+                  background: red;
+                  border: 3px solid yellow;
+                  border-radius: 5px;
+                  margin-top: 10px;
+                  box-shadow: 0 0 10px yellow;
+                  font-size: 16px;
+              ">👉 CLAIM NOW 👈</a>
+              <p style="font-size: 10px; color: #333;">*May contain real bottles. Not a scam. Probably.</p>
+            `;
+            document.body.appendChild(adDiv);
         }
     </script>
 </body>
