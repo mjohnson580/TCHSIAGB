@@ -111,42 +111,79 @@
                 alert('Geolocation is not supported by this browser.');
             }
         }
+        
+// Create falling bottles continuously
+const bottleCount = 10;
 
-        // Create raining bottles
-        for(let i = 0; i < 30; i++) {
-            let wrapper = document.createElement('div');
-            wrapper.className = 'topo-wrapper';
-            wrapper.style.left = Math.random() * (window.innerWidth - 80) + 'px';
-            wrapper.style.animationDuration = (5 + Math.random() * 5) + 's';
+for (let i = 0; i < bottleCount; i++) {
+    createBottle();
+}
 
-            let img = document.createElement('img');
-            img.src = 'topo.png'; // replace with your bottle image URL or path
-            img.className = 'topo';
+function createBottle() {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'topo-wrapper';
 
-            img.addEventListener('click', function(e) {
-                this.classList.add('pop');
+    resetWrapper(wrapper);
 
-                const wrapper = this.parentElement;
-                const rect = wrapper.getBoundingClientRect();
-                const style = window.getComputedStyle(wrapper);
-                const transform = style.transform;
+    const img = document.createElement('img');
+    img.src = 'topo.png';
+    img.className = 'topo';
+    img.style.zIndex = 10;
 
-                let smashed = document.createElement('img');
-                smashed.src = 'smashed.png'; // replace with smashed bottle image URL or path
-                smashed.className = 'smashed';
+    img.addEventListener('click', () => {
+        const rect = wrapper.getBoundingClientRect();
+        const style = window.getComputedStyle(wrapper);
+        const transform = style.transform;
 
-                smashed.style.left = (rect.left + window.scrollX) + 'px';
-                smashed.style.top = (rect.top + window.scrollY) + 'px';
-                smashed.style.transform = transform;
-
-                document.body.appendChild(smashed);
-
-                setTimeout(() => wrapper.remove(), 500);
-            });
-
-            wrapper.appendChild(img);
-            document.body.appendChild(wrapper);
+        let rotation = 0;
+        if (transform && transform !== 'none') {
+            const values = transform.split('(')[1].split(')')[0].split(',');
+            const a = parseFloat(values[0]);
+            const b = parseFloat(values[1]);
+            rotation = Math.atan2(b, a) * (180 / Math.PI);
         }
+
+        // Create smashed bottle at exact position and rotation
+        const smashed = document.createElement('img');
+        smashed.src = 'smashed.png';
+        smashed.className = 'smashed';
+        smashed.style.position = 'absolute';
+        smashed.style.left = rect.left + 'px';
+        smashed.style.top = rect.top + 'px';
+        smashed.style.width = '40px';
+        smashed.style.opacity = '0.3';
+        smashed.style.pointerEvents = 'none';
+        smashed.style.transform = `rotate(${rotation}deg)`;
+        smashed.style.zIndex = 1;
+
+        document.body.appendChild(smashed);
+
+        // Remove the wrapper to stop the bottle
+        wrapper.remove();
+
+        // Create a new bottle to keep total count
+        createBottle();
+    });
+
+    wrapper.appendChild(img);
+    document.body.appendChild(wrapper);
+
+    // When animation ends, reset bottle position and animation
+    wrapper.addEventListener('animationiteration', () => {
+        resetWrapper(wrapper);
+    });
+}
+
+function resetWrapper(wrapper) {
+    wrapper.style.animation = 'none';
+    const startX = Math.random() * (window.innerWidth - 80);
+    wrapper.style.left = startX + 'px';
+    wrapper.style.top = '-100px';
+    wrapper.offsetHeight; // trigger reflow
+    wrapper.style.animation = `fall ${(5 + Math.random() * 5).toFixed(2)}s linear infinite`;
+    wrapper.style.zIndex = 10;
+}
+
     </script>
 </body>
 </html>
