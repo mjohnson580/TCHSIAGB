@@ -80,12 +80,14 @@
             opacity: 0.3;
             pointer-events: none;
             z-index: 1;
+            user-select: none;
         }
         @media (max-width: 480px) {
             h1 { font-size: 28px; padding-top: 30px; }
             button { font-size: 18px; padding: 15px 25px; }
             .topo-wrapper { width: 60px; height: 60px; }
             .topo { width: 30px; left: 15px; top: 15px; }
+            .smashed { width: 40px; }
         }
     </style>
 </head>
@@ -118,18 +120,24 @@
             wrapper.style.animationDuration = (5 + Math.random() * 5) + 's';
 
             let img = document.createElement('img');
-            img.src = 'topo.png'; // replace with your bottle image
+            img.src = 'topo.png'; // replace with your bottle image URL or path
             img.className = 'topo';
 
             img.addEventListener('click', function(e) {
                 this.classList.add('pop');
 
+                const wrapper = this.parentElement;
+                const rect = wrapper.getBoundingClientRect();
+                const style = window.getComputedStyle(wrapper);
+                const transform = style.transform;
+
                 let smashed = document.createElement('img');
-                smashed.src = 'smashed.png'; // replace with your smashed image
+                smashed.src = 'smashed.png'; // replace with smashed bottle image URL or path
                 smashed.className = 'smashed';
 
-                smashed.style.left = wrapper.style.left;
-                smashed.style.top = (parseFloat(window.scrollY) + parseFloat(wrapper.getBoundingClientRect().top) + 40) + 'px';
+                smashed.style.left = (rect.left + window.scrollX) + 'px';
+                smashed.style.top = (rect.top + window.scrollY) + 'px';
+                smashed.style.transform = transform;
 
                 document.body.appendChild(smashed);
 
